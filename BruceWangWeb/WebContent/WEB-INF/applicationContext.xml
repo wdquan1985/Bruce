@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:cache="http://www.springframework.org/schema/cache"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	   		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	   		http://www.springframework.org/schema/context
+	   		http://www.springframework.org/schema/context/spring-context-4.0.xsd
+        	http://www.springframework.org/schema/cache  
+        	http://www.springframework.org/schema/cache/spring-cache-4.0.xsd
+			http://www.springframework.org/schema/aop
+			http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+	   		http://www.springframework.org/schema/tx 
+		    http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+			http://www.springframework.org/schema/mvc 
+			http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+
+	<!-- 启动对@AspectJ注解的支持,即支持AOP -->
+	<aop:aspectj-autoproxy />
+	<!-- 激活spring的注解. -->
+	<context:annotation-config />
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<cache:annotation-driven /> 
+	<cache:annotation-driven cache-manager="cacheManager" />
+	<!--
+		xmlns:ehcache="http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring"
+		   		http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring
+			http://ehcache-spring-annotations.googlecode.com/svn/schema/ehcache-spring/ehcache-spring-1.1.xsd
+	 -->
+	<!-- 扫描注解组件并且自动的注入spring beans中.<tx:annotation-driven transaction-manager="transactionManager" /> 
+	例如,他会扫描@Controller 和@Service下的文件.所以确保此base-package设置正确. -->
+	<context:component-scan base-package="com.bruce" />
+	
+	<!-- aop aspect for log to db -->
+	<!-- 这个id取什么名字都 可以，不影响 -->
+	<bean id="logAdd" class="com.bruce.aop.AuditLoggingAspect" />
+	<!-- aop aspect for  authority check -->
+	<bean id="permission" class="com.bruce.aop.PermissonAspect" />
+	
+	<bean id="dataSourceImpl" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="org.gjt.mm.mysql.Driver" />
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/ts_centling?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="user" value="root" />
+		<property name="password" value="123456" />
+		<!--连接池中保留的最小连接数。 -->
+		<property name="minPoolSize" value="5" />
+		<!--连接池中保留的最大连接数。Default: 15 -->
+		<property name="maxPoolSize" value="30" />
+		<!--初始化时获取的连接数，取值应在minPoolSize与maxPoolSize之间。Default: 3 -->
+		<property name="initialPoolSize" value="10" />
+		<!--最大空闲时间,600秒内未使用则连接被丢弃。若为0则永不丢弃。Default: 0 -->
+		<property name="maxIdleTime" value="600" />
+		<!--当连接池中的连接耗尽的时候c3p0一次同时获取的连接数。Default: 3 -->
+		<property name="acquireIncrement" value="5" />
+		<!--JDBC的标准参数，用以控制数据源内加载的PreparedStatements数量。但由于预缓存的statements 属于单个connection而不是整个连接池。所以设置这个参数需要考虑到多方面的因素。 
+			如果maxStatements与maxStatementsPerConnection均为0，则缓存被关闭。Default: 0 -->
+		<property name="maxStatements" value="0" />
+	</bean>
+
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
+		<property name="dataSource" ref ="dataSourceImpl" />
+		<property name="mappingLocations">
+			<list>
+				<value>classpath:/com/bruce/model/hbm/*.hbm.xml</value>
+			</list>
+		</property>
+			
+		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
+		
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">
+					org.hibernate.dialect.MySQLDialect
+				</prop>
+				<prop key="hibernate.show_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+	
+	<bean id="hibernateTemplate" class="org.springframework.orm.hibernate3.HibernateTemplate">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="cacheQueries">
+			<value>true</value>
+		</property>
+	</bean>
+
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+		<property name="globalRollbackOnParticipationFailure" value="false" />
+	</bean>
+	
+	
+	<!-- 该 BeanPostProcessor 将自动对标注 @Autowired 的 Bean 进行注入 -->     
+    <bean class="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/>  
+    
+    <!-- Added by bruce 
+	<bean id="userEhCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
+		<property name="cacheManager" ref="cacheManager" />
+		<property name="cacheName" value="userCache" />
+	</bean>
+	<bean id="cacheManager"
+		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+		<property name="configLocation">
+			<value>classpath:ehcache.xml</value>
+		</property>
+	</bean>
+    <bean id="userCache"
+		class="org.springframework.security.core.userdetails.cache.EhCacheBasedUserCache">
+		<property name="cache" ref="userEhCache" />
+	</bean>-->
+ 
+     
+    <bean id="cacheManagerFactory" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">  
+        <property name="configLocation" value="classpath:ehcache.xml" />  
+    </bean>
+	      
+    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheCacheManager">      
+        <property name="cacheManager"  ref="cacheManagerFactory"/>  
+    </bean>
+		
+	<bean  class="com.bruce.tool.SpringContextHolder"/>
+	
+		<!-- workaround for 3.0 sql script using Chinese char encoding issue -->
+	<!-- https://jira.spring.io/browse/SPR-8060 -->
+	<bean id="dataSourceInitializer" class="org.springframework.jdbc.datasource.init.DataSourceInitializer">
+	    <property name="dataSource" ref="dataSourceImpl"/>
+	    <property name="databasePopulator">
+	        <bean class="org.springframework.jdbc.datasource.init.ResourceDatabasePopulator">
+	            <property name="sqlScriptEncoding" value="UTF-8"/>
+	            <property name="scripts">
+	                <list>
+	                    <value>classpath:db-test-data.sql</value>
+	                </list>
+	            </property>
+	        </bean>
+	    </property>
+	</bean>
+	
+	
+	<!-- SpringMVC上传文件时,需配置MultipartResolver处理器 -->
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		
+		<!-- 指定所上传文件的总大小不能超过80M......注意maxUploadSize属性的限制不是针对单个文件,而是所有文件的容量之和 -->
+		<property name="maxUploadSize" value="80000000" />  
+		<!--  <property name="uploadTempDir" value="fileUpload/temp" />-->
+	</bean>  
+	
+	<!-- SpringMVC在超出上传文件限制时,会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
+	<!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的,而且此时还没有进入到Controller方法中 -->
+	<bean id="exceptionResolver" class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+	    <property name="exceptionMappings">
+	        <props>
+	            <!-- 遇到MaxUploadSizeExceededException异常时,自动跳转到/WEB-INF/jsp/error_fileupload.jsp页面 -->
+	            <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>
+	        </props>
+	    </property>
+	</bean>
+	
+	<!-- ftp client bean -->
+	<bean id="FtpUtil" class="com.bruce.ftp.client.FtpUtil" />
+	
+	<!-- 增加用户时的加密算法集合 -->
+	<bean id="myEncoder" class="com.bruce.tool.MyEncoder" />
+	<!-- 增加用户时的加密算法集合 -->
+	<bean id="mySpringEncoder" class="com.bruce.tool.MySpringEncoder" />
+
+</beans>

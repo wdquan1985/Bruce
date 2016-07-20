@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping package="com.bruce.model">
+	<class name="Product">
+		<id name="id" column="id">
+			<generator class="identity"/>
+		</id>
+		<property name="brand"/>
+		<property name="model"/>
+		<property name="dmd"/>
+		<property name="manufacturers" column="manu_facturer"/>
+		<property name="lumen"/>
+		<property name="realLumen" column="real_lumen"/>
+		<property name="mainboard" column="main_board"/>
+		<property name="ram"/>
+		<property name="memory"/>
+		<property name="price"/>
+		<property name="costing"/>
+		<property name="salesAmount" column="sales_amount"/>
+		<property name="money"/>
+		<property name="trapezoidal"/>
+		<property name="lightSource" column="light_source"/>
+	</class>
+</hibernate-mapping>

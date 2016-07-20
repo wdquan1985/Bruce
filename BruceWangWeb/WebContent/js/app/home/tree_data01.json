@@ -1,0 +1,22 @@
+ 					[{
+						"attributes" : {
+							"url" : "esbService/define.do"
+						},
+						"id" : "010101",
+						"state" : "open",
+						"text" : "服务定义"
+					}, {
+						"attributes" : {
+							"url" : "esbService/proxy.do"
+						},
+						"id" : "010102",
+						"state" : "open",
+						"text" : "服务封装"
+					}, {
+						"attributes" : {
+							"url" : "esbService/route.do"
+						},
+						"id" : "010103",
+						"state" : "open",
+						"text" : "服务路由"
+					}]
