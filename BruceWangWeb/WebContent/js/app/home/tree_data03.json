@@ -1,9 +1,0 @@
-[
-    {
-    	"attributes" : {
-			"url" : "esbService/monitorLog.do"
-		},
-        "id":"01",
-        "text":"监控日志"
-    }
-]
