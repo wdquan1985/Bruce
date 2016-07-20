@@ -1,0 +1,9 @@
+[
+	{
+    	"attributes" : {
+			"url" : "esbService/initAccessAuth.do"
+		},
+        "id":"01",
+        "text":"访问授权"
+    }
+]
