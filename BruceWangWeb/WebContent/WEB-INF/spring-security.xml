@@ -66,6 +66,7 @@
 	<!-- 一.认证 -->
 	<!-- 注意能够为authentication-manager 设置alias别名   cache-ref="userCache" -->
 	<security:authentication-manager alias="authenticationManager">
+		<!-- 自定义 myUserDetailsService, 用于拿到自定义的Users对象，而不是拿到架构默认的user对象。-->
 		<security:authentication-provider user-service-ref="myUserDetailsService">
 			<!-- 自定义加密方式 -->
 			<security:password-encoder ref="mySpringEncoder">
