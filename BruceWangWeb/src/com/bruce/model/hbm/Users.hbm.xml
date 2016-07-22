@@ -11,5 +11,6 @@
 		<property name="password"/>
 		<property name="role"/>
 		<property name="enabled"/>
+		<property name="content" column="content"/>
 	</class>
 </hibernate-mapping>

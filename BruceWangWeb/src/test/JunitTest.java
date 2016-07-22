@@ -13,12 +13,16 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import com.bruce.daoInterface.UsersDao;
+import com.bruce.model.Users;
+import com.bruce.service.UsersService;
+
 //import com.sextant.base.service.UserService;
 
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring/applicationContext.xml" })
+@ContextConfiguration(locations = { "file:WebContent/WEB-INF/applicationContext.xml" })
 //@Transactional
 public class JunitTest extends AbstractJUnit4SpringContextTests{
 	//非常重要 ，虽然spring是用了xml bean，而不是注解bean，而且这里的被注入对象也不是interface类型，而是实体类。
@@ -26,7 +30,22 @@ public class JunitTest extends AbstractJUnit4SpringContextTests{
 	//之前使用了接口，其实就是使用了多态，跟注入没有关系。
 
 //	@Autowired
-//	UserService userService;
+//	UsersService usersService;
+	
+	@Autowired
+	UsersDao usersDao;
+	
+	
+	@Test
+	public void findByName() {
+		try {
+			Users user = usersDao.findByName("bruce");
+			System.out.println("密码是:" + user.getPassword());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 //	
 //	@Test
 //	public void testPassword() {

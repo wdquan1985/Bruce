@@ -70,14 +70,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		           {field: 'trapezoidal', title: '梯形校正', width: 60,align:'center'},
 		           {field: 'lightSource', title: '光源', width: 60,align:'center'},
 		       ]],
-			    onClickRow:function(rowIndex){
-			        if (lastIndex != rowIndex){
-			        $('#dg').datagrid('endEdit', lastIndex);
-			        $('#dg').datagrid('beginEdit', rowIndex);
-			        setEditing(rowIndex);
-			        }
-			        lastIndex = rowIndex;
-			    },
+			   // onClickRow:function(rowIndex){
+			   //     if (lastIndex != rowIndex){
+			  //      $('#dg').datagrid('endEdit', lastIndex);
+			   //     $('#dg').datagrid('beginEdit', rowIndex);
+			   //     setEditing(rowIndex);
+			   //     }
+			   //     lastIndex = rowIndex;
+			   // },
 			    onRefresh:function(pageNumber, pageSize){
 			    	$('#dg').datagrid('load',{
 			    		page:pageNumber,
@@ -418,9 +418,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				url:'<%=basePath%>productAction/save',
 				method:'post',
 				success:function(data){
-						$.messager.alert('提示','信息保存成功');
-						closeEditor();
-					}
+					alert(data);
+					$.messager.alert('提示','信息保存成功');
+					closeEditor();
+				},
+				error:function(info,er){
+		     		$.messager.alert('提示',info,'error');
+   	     		}
 			});
 		
 		}

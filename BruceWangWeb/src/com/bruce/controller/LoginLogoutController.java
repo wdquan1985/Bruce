@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.bruce.authority.AuthorityRequired;
+import com.bruce.authority.AuthorityType;
+
 @Controller
 @RequestMapping("auth")
 public class LoginLogoutController{
@@ -16,6 +19,7 @@ public class LoginLogoutController{
 	/**
 	 * 指向登录页面
 	 */
+//	@AuthorityRequired(authorityTypes=AuthorityType.SALES_ORDER_FIND)
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getLoginPage(
 			@RequestParam(value = "error", required = false) boolean error,

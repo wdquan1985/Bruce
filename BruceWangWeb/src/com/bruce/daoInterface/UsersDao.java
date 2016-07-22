@@ -12,4 +12,6 @@ import com.bruce.model.Users;
 
 public interface UsersDao extends BaseManager<Users, Long>{
 	//@Cacheable(value="BaseCache")
+	public Users findByName(String userName);
+
 }

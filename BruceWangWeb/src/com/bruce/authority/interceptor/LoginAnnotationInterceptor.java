@@ -16,7 +16,7 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import com.bruce.authority.LoginRequired;
 import com.bruce.authority.ResultTypeEnum;
 import com.bruce.authority.util.SessionHelper;
-import com.bruce.model.User;
+import com.bruce.model.Users;
 
 /**
  * 检查是否已经登录
@@ -39,7 +39,7 @@ public class LoginAnnotationInterceptor extends HandlerInterceptorAdapter {
 		}
 
 		HttpSession session = request.getSession();
-		User user = (User) session.getAttribute(SessionHelper.UserHandler);
+		Users user = (Users) session.getAttribute(SessionHelper.UserHandler);
 
 		if (null == user) {
 			// 需要登录
@@ -57,9 +57,7 @@ public class LoginAnnotationInterceptor extends HandlerInterceptorAdapter {
 				pw.close();
 			}
 			return false;
-
 		}
-
 		return true;
 
 	}

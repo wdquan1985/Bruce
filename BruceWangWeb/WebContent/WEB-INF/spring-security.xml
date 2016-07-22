@@ -66,18 +66,20 @@
 	<!-- 一.认证 -->
 	<!-- 注意能够为authentication-manager 设置alias别名   cache-ref="userCache" -->
 	<security:authentication-manager alias="authenticationManager">
-		<security:authentication-provider>
+		<security:authentication-provider user-service-ref="myUserDetailsService">
+			<!-- 自定义加密方式 -->
 			<security:password-encoder ref="mySpringEncoder">
 			<!-- 用户名做为盐值 -->
 				<security:salt-source user-property="username" />
-			</security:password-encoder>
+			</security:password-encoder> 
+			<!--  
 			<security:jdbc-user-service data-source-ref="dataSourceImpl"
-				users-by-username-query="select username,password,enabled
+				users-by-username-query="select username,password,enabled,content
 													from users 
 													where username=?"
-				authorities-by-username-query="select username,role 
+				authorities-by-username-query="select username,role,content
 														  from users where username=?" 
-						cache-ref="userCache" />
+						cache-ref="userCache" />  -->
 		</security:authentication-provider>
 	</security:authentication-manager>
 	
@@ -106,4 +108,7 @@
 	
 	<b:bean id="cacheManagerSecurity"
 		class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean" />
+	<!-- 自定义认证方式   -->
+	<b:bean id="myUserDetailsService" class="com.bruce.service.MyUserDetailsService" >
+	</b:bean>
 </b:beans>

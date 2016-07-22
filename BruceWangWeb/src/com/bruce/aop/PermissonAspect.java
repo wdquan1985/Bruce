@@ -21,6 +21,7 @@ import com.bruce.model.BaseModel;
 import com.bruce.model.Log;
 import com.bruce.tool.LogType;
 
+//未用到
 @Aspect
 @Order(1)
 public class PermissonAspect {
@@ -38,7 +39,7 @@ public class PermissonAspect {
 //	@Before("permissionCheck()")
 	@Before(value="permissionCheck()&&" + "@annotation(PermissonRequired)",argNames="PermissonRequired")
 	public Object Check(PermissonRequired permissonRequired) throws Throwable {
-		IsLogin isLogin = userAccessAnnotation.isLogin();
+//		IsLogin isLogin = userAccessAnnotation.isLogin();
 		Object resultObject = null;
 		String opretor = "";
 		String userName = null;
@@ -63,22 +64,5 @@ public class PermissonAspect {
 
 		}
 		return resultObject;
-	}
-
-	@AfterThrowing(pointcut="loggingToDB()",throwing="ex")
-	public void doRecoveryActions(Exception ex) {
-		// get user info
-		Authentication auth = SecurityContextHolder.getContext()
-				.getAuthentication();
-		String userName = SecurityContextHolder.getContext()
-				.getAuthentication().getName();
-		String authorities = SecurityContextHolder.getContext()
-				.getAuthentication().getAuthorities().toString();
-		String opretor = "操作人 = " + userName + ", 权限 = " + authorities;
-		long start = System.currentTimeMillis();
-		Log log = new Log(LogType.EXCEPTION, opretor, new Date(start),
-				userName);
-		logManager.addLog(log);
-
 	}
 }

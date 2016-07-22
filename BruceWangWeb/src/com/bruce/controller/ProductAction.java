@@ -19,6 +19,11 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 
 
+
+
+import com.bruce.authority.AuthorityRequired;
+import com.bruce.authority.AuthorityType;
+import com.bruce.authority.ResultTypeEnum;
 import com.bruce.model.BaseModel;
 import com.bruce.model.PageBean;
 import com.bruce.model.Pagination;
@@ -37,6 +42,7 @@ public class ProductAction<T extends BaseModel> extends HttpServlet {
 	@Autowired
 	ProductServiceInter productServiceInter;
 	
+//	@AuthorityRequired(authorityTypes=AuthorityType.SALES_ORDER_FIND, resultType=ResultTypeEnum.json)
 	@RequestMapping(value = "/getall")
 	public @ResponseBody
 	Pagination All(PageBean pageBean, HttpSession session,String brand) {
@@ -47,6 +53,7 @@ public class ProductAction<T extends BaseModel> extends HttpServlet {
 		return productServiceInter.retrieve(pageBean,brand);
 	}
 	
+	@AuthorityRequired(authorityTypes=AuthorityType.SALES_ORDER_FIND, resultType=ResultTypeEnum.json)
 	@RequestMapping(value = "/save")
 	public @ResponseBody
 	void save(Product product) {

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.bruce.authority.util.SessionHelper;
-import com.bruce.model.User;
+import com.bruce.model.Users;
 
 //验证annotation 权限控制
 @Controller("loginController")
@@ -26,7 +26,7 @@ public class LoginController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/login.spr", method=RequestMethod.POST)
-	public ModelAndView login(@ModelAttribute("user")User user, String validcode, HttpSession session) throws Exception {
+	public ModelAndView login(@ModelAttribute("user")Users user, String validcode, HttpSession session) throws Exception {
 		ModelAndView mav = new ModelAndView();
 		session.setAttribute(SessionHelper.UserHandler, user);
 		mav.setViewName("redirect:/mg/userIndex.jsp");

@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+//未用到
 //验证annotation 权限控制
 //创建了一个新的annotation.
 @Target({ElementType.METHOD})//can add on a method or a class

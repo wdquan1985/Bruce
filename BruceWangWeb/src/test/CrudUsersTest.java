@@ -74,11 +74,11 @@ public class CrudUsersTest {
 		}
 	}
 	
-	@Test
-	public void setUsers() {
-		Users user = new Users("user", "user", "ROLE_ADMIN", true);
-		usersServiceInter.addUser(user);
-	}
+//	@Test
+//	public void setUsers() {
+//		Users user = new Users("user", "user", "ROLE_ADMIN", true);
+//		usersServiceInter.addUser(user);
+//	}
 }
 
 

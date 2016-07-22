@@ -1,8 +1,19 @@
 package com.bruce.dao;
 
+import java.util.List;
+
+import org.hibernate.Criteria;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.bruce.daoInterface.BaseManagerImpl;
 import com.bruce.daoInterface.UsersDao;
+import com.bruce.model.CrudUsers;
 import com.bruce.model.Users;
 
 
@@ -16,17 +27,16 @@ public class UsersDaoImpl extends BaseManagerImpl<Users, Long> implements UsersD
 ////	private HibernateTemplate hibernateTemplate;
 //	
 //	
-//	@SuppressWarnings("unchecked")
-//	@Transactional(propagation=Propagation.REQUIRED)
-//	public CrudUsers searchUni(Long id,String firstName){
-//		Criteria crit = getSession().createCriteria(CrudUsers.class);  
+	@SuppressWarnings("unchecked")
+	@Transactional(propagation=Propagation.REQUIRED)
+	public Users findByName(String userName){
+		Criteria crit = getSession().createCriteria(Users.class);  
 //	    crit.add(Restrictions.eq("id", id)); 
-//	    crit.add(Restrictions.eq("firstname", firstName));
-//	    CrudUsers conft = (CrudUsers)crit.uniqueResult();  
-//	    //System.out.println(conft.getId());  
-//		return conft;
-//		
-//	}
+	    crit.add(Restrictions.eq("username", userName));
+	    Users conft = (Users)crit.uniqueResult();  
+		return conft;
+		
+	}
 //	
 //	//Get a page of data.
 //	@SuppressWarnings("unchecked")

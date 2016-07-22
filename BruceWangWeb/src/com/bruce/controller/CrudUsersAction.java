@@ -33,6 +33,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 //import org.springframework.web.servlet.ModelAndView;
 
+import com.bruce.authority.AuthorityRequired;
+import com.bruce.authority.AuthorityType;
+import com.bruce.authority.ResultTypeEnum;
 import com.bruce.model.BaseModel;
 import com.bruce.model.CrudUsers;
 import com.bruce.model.PageBean;
@@ -40,14 +43,9 @@ import com.bruce.model.Pagination;
 import com.bruce.serviceInterface.CrudUsersServiceInter;
 import com.bruce.upload.UploadUtil;
 
-
-
-
-
 @Controller
 @RequestMapping("/crudUsers")
 public class CrudUsersAction<T extends BaseModel> extends HttpServlet {
-
 	/**
 	 * 
 	 */
@@ -56,8 +54,11 @@ public class CrudUsersAction<T extends BaseModel> extends HttpServlet {
 	CrudUsersServiceInter crudUsersServiceInter;
 	
 	@RequestMapping(value = "/getall", method = RequestMethod.GET)
-	public @ResponseBody
-	Pagination All(PageBean pageBean, HttpSession session) {
+	//@ResponseBody,表示该方法的返回结果直接写入HTTP response body中
+	//一般在异步获取数据时使用，在使用@RequestMapping后，返回值通常解析为跳转路径，加上@responsebody后返回结果不会被解析为跳转路径，
+	//而是直接写入HTTP response body中。比如异步获取json数据，加上@responsebody后，会直接返回json数据。
+	@ResponseBody
+	public Pagination All(PageBean pageBean, HttpSession session) {
 		System.out.println("2222222222222222222:热加载");
 		return crudUsersServiceInter.retrieve(pageBean);
 	}

@@ -5,8 +5,8 @@ public class AuthorityHelper {
 
 	/**
 	 * 判断是否有权限
-	 * @param akey
-	 * @param session
+	 * @param akey rc中位置的索引值,也就是权限位 
+	 * @param rc 权限字段,比如 11010101011101
 	 * @return
 	 */
 	public static boolean hasAuthority(int akey, String rc){
